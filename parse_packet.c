@@ -24,7 +24,7 @@ bool set_interface_attribs(int fd,int speed,int parity)
     cfsetospeed(&tty, SPEED);
     int status = tcsetattr(fd, TCSANOW, &tty);
 
-    if  (status != 0){
+    if  (status != 0) {
         perror("tcsetattr fd1");
         return false;
     }
@@ -54,7 +54,7 @@ bool set_interface_attribs(int fd,int speed,int parity)
 int main(int argc, char **argv)
 {
     int fd;
-    int count =0;
+    int packet_count =0;
     bool flag=0;
     int buff_len=1;
     uint8_t buff[1];
@@ -76,72 +76,72 @@ int main(int argc, char **argv)
     //  printf("Error with set_interface_attribs function.\n");
     //  exit(1);
     // }
-    uint8_t packet[31]={0};
+    uint8_t packet[31]= {0};
     int buff_count=0;
     int temp;
     bool ano_flag=0;
     int state=1;
     while(1)while(read(fd,buff,sizeof(uint8_t)*buff_len))
-    {
-        
-        //printf("%X     ",buff[0]);
-        //printf("(%d)",temp);
-        if(state==1)
         {
-            if(buff[0] == 0x66)
+
+            //printf("%X     ",buff[0]);
+            //printf("(%d)",temp);
+            if(state==1)
             {
-                state=2;  
-            }
-            buff_count++;
-            packet[buff_count-1]=buff[0]; 
-        }
-        if(state==2)
-        {
-            if(buff_count==2)
-            {
-                state=3;
-            }
-            else
-            {
-                state=1;
-            }
-            buff_count++;
-            packet[buff_count-1]=buff[0];
-        }
-        if(state==3)
-        {
-            if(buff_count==30)
-            {
-                state=1;
-                for(int i=0; i<30; i++)
-                {   
-                    printf("%X ",packet[i]);
-                }
-                count++;
-             printf("\ncount:l %d\n",count);
-                if(packet[13]==0x0)
+                if(buff[0] == 0x66)
                 {
-                    printf("id: %X %X\n",packet[18],packet[19]);
-                    printf("status: positive\n\n");
+                    state=2;
                 }
-                else
-                {
-                    printf("id: %X %X\n",packet[19],packet[20]);
-                    printf("status: negitive\n\n");
-                }
-                for(int i=0; i<30; i++)
-                {
-                    packet[i]=0;
-                }t
-                buff_count=0;
-            }
-            else
-            {
                 buff_count++;
                 packet[buff_count-1]=buff[0];
             }
-        }    
-    }
+            if(state==2)
+            {
+                if(buff_count==2)
+                {
+                    state=3;
+                }
+                else
+                {
+                    state=1;
+                }
+                buff_count++;
+                packet[buff_count-1]=buff[0];
+            }
+            if(state==3)
+            {
+                if(buff_count==30)
+                {
+                    state=1;
+                    for(int i=0; i<30; i++)
+                    {
+                        printf("%X ",packet[i]);
+                    }
+                    packet_count++;
+                    printf("\ncount:l %d\n",packet_count);
+                    if(packet[13]==0x0)
+                    {
+                        printf("id: %X %X\n",packet[18],packet[19]);
+                        printf("status: positive\n\n");
+                    }
+                    else
+                    {
+                        printf("id: %X %X\n",packet[19],packet[20]);
+                        printf("status: negitive\n\n");
+                    }
+                    for(int i=0; i<30; i++)
+                    {
+                        packet[i]=0;
+                    } t
+                    buff_count=0;
+                }
+                else
+                {
+                    buff_count++;
+                    packet[buff_count-1]=buff[0];
+                }
+            }
+        }
     close(fd);
     exit(0);
 }
@@ -152,8 +152,8 @@ int main(int argc, char **argv)
     {
         if(buff[0]==0x66 || buff[0]==0xE6)
         {
-            count++;
-            printf("count: %d",count);
+            paccount++;
+            printf("paccount: %d",paccount);
             flag=0;
             return 0;
         }
