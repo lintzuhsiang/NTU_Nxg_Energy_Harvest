@@ -55,7 +55,6 @@ int main(int argc, char **argv)
 {
     int fd;
     int packet_count =0;
-    bool flag=0;
     int buff_len=1;
     uint8_t buff[1];
     char *dev = "/dev/ttyUSB0";
@@ -78,26 +77,24 @@ int main(int argc, char **argv)
     // }
     uint8_t packet[31]= {0};
     int buff_count=0;
-    int temp;
-    bool ano_flag=0;
     int state=1;
     while(1)while(read(fd,buff,sizeof(uint8_t)*buff_len))
         {
-
-            //printf("%X     ",buff[0]);
-            //printf("(%d)",temp);
+            //printf("hello");
             if(state==1)
             {
                 if(buff[0] == 0x66)
                 {
                     state=2;
+                    buff_count++;
+                    packet[buff_count-1]=buff[0];
                 }
+            }
+            else if(state==2)
+            {
                 buff_count++;
                 packet[buff_count-1]=buff[0];
-            }
-            if(state==2)
-            {
-                if(buff_count==2)
+                if(buff[0]==0x66 || buff[0]==0xE6)
                 {
                     state=3;
                 }
@@ -105,10 +102,8 @@ int main(int argc, char **argv)
                 {
                     state=1;
                 }
-                buff_count++;
-                packet[buff_count-1]=buff[0];
             }
-            if(state==3)
+            else if(state==3)
             {
                 if(buff_count==30)
                 {
@@ -118,7 +113,7 @@ int main(int argc, char **argv)
                         printf("%X ",packet[i]);
                     }
                     packet_count++;
-                    printf("\ncount:l %d\n",packet_count);
+                    printf("\npacket_count: %d\n",packet_count);
                     if(packet[13]==0x0)
                     {
                         printf("id: %X %X\n",packet[18],packet[19]);
@@ -132,7 +127,7 @@ int main(int argc, char **argv)
                     for(int i=0; i<30; i++)
                     {
                         packet[i]=0;
-                    } t
+                    }
                     buff_count=0;
                 }
                 else
@@ -145,28 +140,3 @@ int main(int argc, char **argv)
     close(fd);
     exit(0);
 }
-/*int aaa(uint8_t buff[0])
-{
-    //printf("%X ", buff[0]);
-    if(flag==1)
-    {
-        if(buff[0]==0x66 || buff[0]==0xE6)
-        {
-            paccount++;
-            printf("paccount: %d",paccount);
-            flag=0;
-            return 0;
-        }
-    }
-    if(buff[0] == 0x66)
-    {
-        flag=1;
-        return 0;
-    }
-    return 0;
-}*/
-
-
-
-
-
