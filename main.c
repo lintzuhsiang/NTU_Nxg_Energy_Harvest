@@ -18,7 +18,7 @@
 
 #define BUF_SZ 1024
 
-int qos = 0;
+int qos = 2;
 
 
 #define FALSE  -1
@@ -202,6 +202,13 @@ int main(int argc,char **argv) {
             int serverIndex = 0;
 
             uint8_t message [100] ;
+
+            mosquitto_lib_init();    //initial the mosquitto function
+            mosq = mosquitto_new(NULL, 1, NULL);  //create a new mosquitto client
+            mosquitto_username_pw_set(mosq, mqttUsername, mqttPasswd);   //configure a username and passwd
+            mosquitto_publish_callback_set(mosq, my_publish_callback);
+            //mosquitto_connect_callback_set(mosq,my_connect_callback);  //set the connect callback
+            mosquitto_subscribe(mosq,NULL,topic,qos);
             if (status != -1) {
 
                 sprintf(message, "{" "\"device_id\": %X %X" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
@@ -211,13 +218,6 @@ int main(int argc,char **argv) {
                 printf( "Topic is %s\n", topic);
                 fflush(stdout);
 
-                mosquitto_lib_init();    //initial the mosquitto function
-                mosq = mosquitto_new(NULL, 1, NULL);  //create a new mosquitto client
-
-
-                mosquitto_username_pw_set(mosq, mqttUsername, mqttPasswd);   //configure a username and passwd
-                mosquitto_publish_callback_set(mosq, my_publish_callback);
-                //mosquitto_connect_callback_set(mosq,my_connect_callback);  //set the connect callback
 
 
                 if(mosquitto_connect(mosq, host, port, 60)) {
