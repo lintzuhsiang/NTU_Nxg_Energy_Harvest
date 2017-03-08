@@ -1,0 +1,36 @@
+#ifndef __MQTT_COMMAND_H__
+#define __MQTT_COMMAND_H__
+
+typedef enum {
+	MQTT_INPUT_INDEX_MAIN = 0,
+	MQTT_INPUT_INDEX_SERVER_ADDR,
+	MQTT_INPUT_INDEX_SERVER_PORT,
+	MQTT_INPUT_INDEX_QOS,
+	MQTT_INPUT_INDEX_SERVER_COUNT,
+	MQTT_INPUT_INDEX_SERVER_LIST_START
+} MqttInputArgumentIndex;
+
+typedef enum {
+	MQTT_INPUT_After_Server_INDEX_CLIENTID = 0,
+	MQTT_INPUT_After_Server_INDEX_USERNAME
+} MqttInputArgumentAfterServerListIndex;
+
+typedef enum {
+	SERVER_INFO_INDEX_ADDR = 0,
+	SERVER_INFO_INDEX_PORT,
+	SERVER_INFO_INDEX_TOTAL_SIZE
+} ServerInfoIndex;
+
+typedef enum {
+	CONNECT_RESPONSE_SUCCESS = 0,
+	CONNECT_RESPONSE_FAILED_PROTOCOL_VERSION,
+	CONNECT_RESPONSE_FAILED_IDENTIFIER,
+	CONNECT_RESPONSE_FAILED_BROKER
+} ConnectResponse;
+
+typedef struct {
+	char* host;
+	int port;
+} ServerInfo;
+
+#endif
