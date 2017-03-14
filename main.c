@@ -96,30 +96,14 @@ void my_publish_callback(struct mosquitto *mosq, void *obj, int mid)
 
 void mqttset(struct mosquitto *mosq,char* topic)
 {
-    //public:
-        //mqttset(struct mosquitto *mosq){cout"Setting mqtt.\n";}
-
-    char* host = "broker.mqttdashboard.com";
-    int port = 1883;
     char* mqttClientId = NULL;
     char* mqttUsername = NULL;
     char* mqttPasswd = NULL;
-       //char* name = "id";
-    //char *topic = "hello";
-        //struct mosquitto *mosq;
-    char buf[BUF_SZ];
-    int numServer = 1;
-    int serverIndex = 0;
-
-    uint8_t message [100] ;
-    mosquitto_lib_init();    //initial the mosquitto function
-    mosq = mosquitto_new(NULL, 1, NULL);  //create a new mosquitto client
     mosquitto_username_pw_set(mosq, mqttUsername, mqttPasswd);   //configure a username and passwd
     mosquitto_publish_callback_set(mosq, my_publish_callback);
-        //mosquitto_connect_callback_set(mosq,my_connect_callback);  //set the connect callback
+    //mosquitto_connect_callback_set(mosq,my_connect_callback);  //set the connect callback
     mosquitto_subscribe(mosq,NULL,topic,qos);
-
-};
+}
 
 int main(int argc,char **argv) {
     int fd;
@@ -144,13 +128,16 @@ int main(int argc,char **argv) {
     int buff_count=0;
     int state=1;
     int status = -1;
-    //int *id =  calloc(10 , sizeof(int));
     uint8_t id [10] = {0};
 
-   
+    struct mosquitto *mosq;
+    uint8_t message [100] ;
+    char* host = "broker.mqttdashboard.com";
+    int port = 1883;
+    char* topic="hello";
+
     while(1)while(read(fd,buff,sizeof(uint8_t)*buff_len))
         {
-            //printf("hello");
             if(state==1)
             {
                 if(buff[0] == 0x66)
@@ -215,25 +202,16 @@ int main(int argc,char **argv) {
                 }
             }
 
-
-            struct mosquitto *mosq;
-            uint8_t message[100];
-            char* topic="hello";         
-            char* host = "broker.mqttdashboard.com";
-            int port = 1883;
+            mosquitto_lib_init();    //initial the mosquitto function
+            mosq = mosquitto_new(NULL, 1, NULL);
             mqttset(mosq,topic);
 
-        
             if (status != -1) {
 
                 sprintf(message, "{" "\"device_id\": %X %X" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
-
-
                 printf("Start to connect to server.\n");
                 printf( "Topic is %s\n", topic);
                 fflush(stdout);
-
-
 
                 if(mosquitto_connect(mosq, host, port, 60)) {
                     fprintf(stderr, "Unable to connect.\n");
