@@ -63,6 +63,7 @@ bool set_interface_attribs(int fd,int speed,int parity)
 }
 
 
+
 void my_connect_callback(struct mosquitto *mosq, void *userdata, int result)
 {
     int i;
@@ -132,9 +133,9 @@ int main(int argc,char **argv) {
 
     struct mosquitto *mosq;
     uint8_t message [100] ;
-    char* host = "broker.mqttdashboard.com";
+    char* host = "140.112.41.157";
     int port = 1883;
-    char* topic="hello";
+    char* topic="2d9b13acefa7e4b540408d92c3078c61";
 
     while(1)while(read(fd,buff,sizeof(uint8_t)*buff_len))
         {
@@ -208,7 +209,7 @@ int main(int argc,char **argv) {
 
             if (status != -1) {
 
-                sprintf(message, "{" "\"device_id\": %X %X" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
+                sprintf(message, "{" "\"device_id\": \"%X %X\"" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
                 printf("Start to connect to server.\n");
                 printf( "Topic is %s\n", topic);
                 fflush(stdout);
