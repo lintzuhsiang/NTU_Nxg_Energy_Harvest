@@ -45,7 +45,7 @@ bool set_interface_attribs(int fd,int speed,int parity)
     tty.c_iflag &= ~(IXOFF | IXON);
     tty.c_cflag &= ~CSTOPB;
     tty.c_oflag = 0;
-    tty.c_lflag = IEXTEN | ECHOE | ECHOK | ECHOCTL | ECHOKE;
+    //tty.c_lflag = IEXTEN | ECHOE | ECHOK | ECHOCTL | ECHOKE;
     tty.c_cc[VINTR] = 003;
     tty.c_cc[VQUIT] = 034;
     tty.c_cc[VERASE] = 0177;
