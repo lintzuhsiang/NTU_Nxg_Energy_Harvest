@@ -116,12 +116,12 @@ int main(int argc, char **argv)
                     printf("\npacket_count: %d\n",packet_count);
                     if(packet[13]==0x0)
                     {
-                        printf("id: %X %X\n",packet[18],packet[19]);
+                        printf("id: %X%X\n",packet[18],packet[19]);
                         printf("status: positive\n\n");
                     }
                     else
                     {
-                        printf("id: %X %X\n",packet[19],packet[20]);
+                        printf("id: %X%X\n",packet[19],packet[20]);
                         printf("status: negitive\n\n");
                     }
                     for(int i=0; i<30; i++)
