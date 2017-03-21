@@ -207,7 +207,7 @@ int main(int argc,char **argv) {
 
             if (status != -1) {
 
-                sprintf(message, "{" "\"device_id\": %X%X" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
+                sprintf(message, "{" "\"device_id\": \"%X%X\"" "," "\"cmd\":\"update_status\"" "," "\"status\": %d" "}",id[0],id[1],status);
                 printf("Start to connect to server.\n");
                 printf( "Topic is %s\n", topic);
                 fflush(stdout);
